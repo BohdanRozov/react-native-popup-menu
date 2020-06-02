@@ -1,6 +1,16 @@
-import React from 'react';
-import { I18nManager, Animated, Easing, StyleSheet, PixelRatio } from 'react-native';
-import { OPEN_ANIM_DURATION, CLOSE_ANIM_DURATION, USE_NATIVE_DRIVER } from '../constants';
+import React from "react";
+import {
+  I18nManager,
+  Animated,
+  Easing,
+  StyleSheet,
+  PixelRatio,
+} from "react-native";
+import {
+  OPEN_ANIM_DURATION,
+  CLOSE_ANIM_DURATION,
+  USE_NATIVE_DRIVER,
+} from "../constants";
 
 const axisPosition = (oDim, wDim, tPos, tDim) => {
   // if options are bigger than window dimension, then render at 0
@@ -16,7 +26,7 @@ const axisPosition = (oDim, wDim, tPos, tDim) => {
     return tPos + tDim - oDim;
   }
   // compute center position
-  let pos = Math.round(tPos + (tDim / 2) - (oDim / 2));
+  let pos = Math.round(tPos + tDim / 2 - oDim / 2);
   // check top boundary
   if (pos < 0) {
     return 0;
@@ -43,19 +53,16 @@ function fit(pos, len, minPos, maxPos) {
 }
 // fits options (position) into safeArea
 export const fitPositionIntoSafeArea = (position, layouts) => {
-  const { windowLayout, safeAreaLayout, optionsLayout } = layouts;
+  const { safeAreaLayout, optionsLayout } = layouts;
   if (!safeAreaLayout) {
     return position;
   }
-  const { x: saX, y: saY, height: saHeight, width: saWidth } = safeAreaLayout;
-  const { height: oHeight, width: oWidth } = optionsLayout;
-  const { width: wWidth } = windowLayout;
+  const { y: saY, height: saHeight } = safeAreaLayout;
+  const { height: oHeight } = optionsLayout;
   let { top, left, right } = position;
   top = fit(top, oHeight, saY, saY + saHeight);
-  left = fit(left, oWidth, saX, saX + saWidth)
-  right = fit(right, oWidth, wWidth - saX - saWidth, saX)
   return { top, left, right };
-}
+};
 
 export const computePosition = (layouts, isRTL) => {
   const { windowLayout, triggerLayout, optionsLayout } = layouts;
@@ -64,13 +71,12 @@ export const computePosition = (layouts, isRTL) => {
   const { height: oHeight, width: oWidth } = optionsLayout;
   const top = axisPosition(oHeight, wHeight, tY - wY, tHeight);
   const left = axisPosition(oWidth, wWidth, tX - wX, tWidth);
-  const start = isRTL ? 'right' : 'left';
+  const start = isRTL ? "right" : "left";
   const position = { top, [start]: left };
   return fitPositionIntoSafeArea(position, layouts);
 };
 
 export default class ContextMenu extends React.Component {
-
   constructor(props) {
     super(props);
     this.state = {
@@ -88,7 +94,7 @@ export default class ContextMenu extends React.Component {
   }
 
   close() {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       Animated.timing(this.state.scaleAnim, {
         duration: CLOSE_ANIM_DURATION,
         toValue: 0,
@@ -101,17 +107,19 @@ export default class ContextMenu extends React.Component {
   render() {
     const { style, children, layouts, ...other } = this.props;
     const animation = {
-      transform: [ { scale: this.state.scaleAnim } ],
+      transform: [{ scale: this.state.scaleAnim }],
       opacity: this.state.scaleAnim,
     };
     const position = computePosition(layouts, I18nManager.isRTL);
     return (
-      <Animated.View {...other} style={[styles.options, style, animation, position]}>
+      <Animated.View
+        {...other}
+        style={[styles.options, style, animation, position]}
+      >
         {children}
       </Animated.View>
     );
   }
-
 }
 
 // public exports
@@ -120,13 +128,13 @@ ContextMenu.fitPositionIntoSafeArea = fitPositionIntoSafeArea;
 
 export const styles = StyleSheet.create({
   options: {
-    position: 'absolute',
+    position: "absolute",
     borderRadius: 2,
-    backgroundColor: 'white',
+    backgroundColor: "white",
     width: PixelRatio.roundToNearestPixel(200),
 
     // Shadow only works on iOS.
-    shadowColor: 'black',
+    shadowColor: "black",
     shadowOpacity: 0.3,
     shadowOffset: { width: 3, height: 3 },
     shadowRadius: 4,

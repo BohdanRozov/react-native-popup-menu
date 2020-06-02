@@ -2093,27 +2093,20 @@
 
 
   var fitPositionIntoSafeArea = function fitPositionIntoSafeArea(position, layouts) {
-    var windowLayout = layouts.windowLayout,
-        safeAreaLayout = layouts.safeAreaLayout,
+    var safeAreaLayout = layouts.safeAreaLayout,
         optionsLayout = layouts.optionsLayout;
 
     if (!safeAreaLayout) {
       return position;
     }
 
-    var saX = safeAreaLayout.x,
-        saY = safeAreaLayout.y,
-        saHeight = safeAreaLayout.height,
-        saWidth = safeAreaLayout.width;
-    var oHeight = optionsLayout.height,
-        oWidth = optionsLayout.width;
-    var wWidth = windowLayout.width;
+    var saY = safeAreaLayout.y,
+        saHeight = safeAreaLayout.height;
+    var oHeight = optionsLayout.height;
     var top = position.top,
         left = position.left,
         right = position.right;
     top = fit(top, oHeight, saY, saY + saHeight);
-    left = fit(left, oWidth, saX, saX + saWidth);
-    right = fit(right, oWidth, wWidth - saX - saWidth, saX);
     return {
       top: top,
       left: left,
@@ -2136,7 +2129,7 @@
         oWidth = optionsLayout.width;
     var top = axisPosition(oHeight, wHeight, tY - wY, tHeight);
     var left = axisPosition(oWidth, wWidth, tX - wX, tWidth);
-    var start = isRTL ? 'right' : 'left';
+    var start = isRTL ? "right" : "left";
 
     var position = _defineProperty({
       top: top
@@ -2214,12 +2207,12 @@
   ContextMenu.fitPositionIntoSafeArea = fitPositionIntoSafeArea;
   var styles$4 = reactNative.StyleSheet.create({
     options: {
-      position: 'absolute',
+      position: "absolute",
       borderRadius: 2,
-      backgroundColor: 'white',
+      backgroundColor: "white",
       width: reactNative.PixelRatio.roundToNearestPixel(200),
       // Shadow only works on iOS.
-      shadowColor: 'black',
+      shadowColor: "black",
       shadowOpacity: 0.3,
       shadowOffset: {
         width: 3,
